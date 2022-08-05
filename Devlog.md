@@ -32,3 +32,6 @@ pip install uvicorn[standard]
 - Open browser with url: (http://localhost:8000/docs)[http://localhost:8000/docs]
 
 ## release version 0.0.1
+
+### * create docker image for version 0.0.1
+
