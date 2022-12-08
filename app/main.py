@@ -1,9 +1,14 @@
+from datetime import datetime, timedelta
 from typing import Union
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Body, Header
 
 app = FastAPI()
 
+import auth
+from token_service import TokenService
+
+tokenService = TokenService()
 
 @app.get("/")
 def welcome():
@@ -15,3 +20,13 @@ def generate_object_info_by_category(category):
     if category == 'book':
         return { 'id': 'book01', 'title': 'Book 1', 'author_id': 'peter_pan', 'author_name': 'Peter Pan'}
     return {"id": 'sample-object-01', "name": 'This is object Name' }
+
+
+@app.post("/auth/basic/login")
+def basicSignInJWT(account_id:str=Body(), password:str=Body()):
+    return auth.basicSignInJWT(tokenService, account_id, password)
+    
+@app.get("/user/me")
+def getUserInfo(token:str=Header()):
+    return auth.getUserInfo(tokenService, token)
+    
