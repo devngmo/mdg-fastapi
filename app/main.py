@@ -2,8 +2,16 @@ from datetime import datetime, timedelta
 from typing import Union
 
 from fastapi import FastAPI, Body, Header
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins = '*',
+    allow_credentials=True,
+    allow_methods = '*',
+    allow_headers = '*'
+)
 
 import auth
 from token_service import TokenService
