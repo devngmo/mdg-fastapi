@@ -24,11 +24,20 @@ tokenService = TokenService()
 def welcome():
     return 'welcome'
 
+def createBook(no: int):
+    return { 'id': f'book-{no}', 'title': f'Book {no}', 'author_id': 'peter_pan', 'author_name': 'Peter Pan'}
+def createAirplanTicket(no: int):
+    td = random.randint(0, 30)
+    departureTime = datetime.now() + timedelta(days=td)
+    arrivalTime = departureTime + timedelta(days=random.randint(1,2))
+    return { 'id': 'ticket01', 'departure_time': departureTime.isoformat(), 'arrival_time': arrivalTime.isoformat(), 'departure_place': 'hcm', 'arrival_place': 'hanoi'}
 
 @app.get("/object/{category}")
 def generate_object_info_by_category(category):
     if category == 'book':
-        return { 'id': 'book01', 'title': 'Book 1', 'author_id': 'peter_pan', 'author_name': 'Peter Pan'}
+        return createBook(1)
+    if category == 'ticket':
+        return createAirplanTicket(1)
     return {"id": 'sample-object-01', "name": 'This is object Name' }
 
 @app.get("/objects/{category}/{pageSize}")
@@ -36,7 +45,10 @@ def generate_objects_info_by_category(category, pageSize:int, delaySeconds: int 
     ls = []
     for i in range(pageSize):
         rnd = random.randint(1, 100)
-        ls += [{ 'id': f'{category}-{i}', 'title': f'{category} {i} Item {rnd}', 'author_id': f'author-{rnd}', 'author_name': f'Author {rnd}'}]
+        if category == 'book':
+            ls += [createBook(i)]
+        else:
+            ls += [createAirplanTicket(i)]
 
     if delaySeconds > 0:
         print(f'Sleep for {delaySeconds} seconds...')
